@@ -11,6 +11,13 @@ const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 
 const navLinks = document.querySelector('.nav__links');
+
+const operationsTabs = document.querySelectorAll('.operations__tab');
+const operationsTabContents = document.querySelectorAll('.operations__content');
+const operationsTabContainer = document.querySelector(
+	'.operations__tab-container',
+);
+
 //==================================================
 
 //          Modal window
@@ -70,6 +77,7 @@ document.querySelector('.btn--close-cookie').addEventListener('click', () => {
 btnScrollTo.addEventListener('click', (e) => {
 	e.preventDefault();
 	section1.scrollIntoView({ behavior: 'smooth' });
+
 	// Method for old browsers
 	// get coordinates of section1
 	// const section1Coordinates = section1.getBoundingClientRect();
@@ -93,5 +101,26 @@ navLinks.addEventListener('click', function (e) {
 		// Smooth scrol to section
 		document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
 	}
+});
+
+//         Switching tabs
+operationsTabContainer.addEventListener('click', (e) => {
+	e.preventDefault();
+	const clickedButton = e.target.closest('.operations__tab');
+
+	// If clickedButton === null exit from eventListener (click not a button)
+	if (!clickedButton) return;
+	// Active tab
+	operationsTabs.forEach((tab) => {
+		tab.classList.remove('operations__tab--active');
+	});
+	clickedButton.classList.add('operations__tab--active');
+	// Active content
+	operationsTabContents.forEach((tab) =>
+		tab.classList.remove('operations__content--active'),
+	);
+	document
+		.querySelector(`.operations__content--${clickedButton.dataset.tab}`)
+		.classList.add('operations__content--active');
 });
 
