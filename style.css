@@ -413,7 +413,6 @@ h4 {
   position: absolute;
   top: 50%;
   z-index: 10;
-
   border: none;
   background: rgba(255, 255, 255, 0.7);
   font-family: inherit;
@@ -423,6 +422,10 @@ h4 {
   width: 5.5rem;
   font-size: 3.25rem;
   cursor: pointer;
+
+}
+.slider__btn:disabled{
+  opacity: 0.3;
 }
 
 .slider__btn--left {
@@ -460,8 +463,7 @@ h4 {
 }
 
 .dots__dot--active {
-  /* background-color: #fff; */
-  background-color: #888;
+   background-color: #413f3f;
   opacity: 1;
 }
 
