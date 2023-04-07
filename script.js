@@ -20,22 +20,27 @@ const operationsTabContents = document.querySelectorAll('.operations__content');
 const operationsTabContainer = document.querySelector(
 	'.operations__tab-container',
 );
+
+const lazyImages = document.querySelectorAll('img[data-src]');
 //==================================================
 
 //*        Appearance section after scroll
 const appearanceSection = (entries, observer) => {
-	// entries = sectionObserver.threshold
 	const entry = entries[0];
 	if (!entry.isIntersecting) return;
 	entry.target.classList.remove('section--hidden');
 	observer.unobserve(entry.target);
 };
-const sectionObserver = new IntersectionObserver(appearanceSection, {
+const sectionObserverOptions = {
 	// element or null (viewport)
 	root: null,
 	// [] with % visibility of element from .observ()
 	threshold: 0.1,
-});
+};
+const sectionObserver = new IntersectionObserver(
+	appearanceSection,
+	sectionObserverOptions,
+);
 sections.forEach((section) => {
 	// Hide sections but header
 	section.classList.add('section--hidden');
@@ -51,12 +56,16 @@ const getStikyNav = (entries, observer) => {
 	nav.classList[method]('sticky');
 };
 const navHeight = nav.getBoundingClientRect().height;
-const headerObserver = new IntersectionObserver(getStikyNav, {
+const headerObserverOptions = {
 	root: null,
 	threshold: 0,
 	// before the end of the section
 	rootMargin: `-${navHeight}px`,
-});
+};
+const headerObserver = new IntersectionObserver(
+	getStikyNav,
+	headerObserverOptions,
+);
 headerObserver.observe(header);
 //--------------------------------------------------
 // Method using coordinates
@@ -197,4 +206,28 @@ document.addEventListener('keydown', (e) => {
 	}
 });
 //==================================================
+
+//*         Lazy loading for images
+
+const loadImage = (entries, observer) => {
+	const entry = entries[0];
+
+	if (!entry.isIntersecting) return;
+	// Change image
+	entry.target.src = entry.target.dataset.src;
+	entry.target.addEventListener('load', () => {
+		entry.target.classList.remove('lazy-img');
+	});
+	// Delete observer
+	observer.unobserve(entry.target);
+};
+const loadObserverOptions = {
+	root: null,
+	threshold: 0.5,
+};
+const lazyImagesObserver = new IntersectionObserver(
+	loadImage,
+	loadObserverOptions,
+);
+lazyImages.forEach((image) => lazyImagesObserver.observe(image));
 
